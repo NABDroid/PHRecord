@@ -1,0 +1,6 @@
+@PHRecord_HostAddress = http://localhost:5258
+
+GET {{PHRecord_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

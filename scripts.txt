@@ -1,0 +1,3 @@
+
+scaffold-DbContext "Data Source=DESKTOP-CR2EK4M;Initial Catalog=PHR_DB;User ID=solution;Password=solution;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "Models" -ContextDir "Context" -f
+
