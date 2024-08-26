@@ -27,10 +27,10 @@ namespace PHRecord.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
-        public async Task<ResponseDTO> registration(UserInfo userInfo)
+        [Route("register")]
+        public async Task<ResponseDTO> registration(RegistrationDTO registrationDTO)
         {
-            ResponseDTO responseDTO = await authService.register(userInfo);
+            ResponseDTO responseDTO = await authService.register(registrationDTO);
             return responseDTO;
         }
 

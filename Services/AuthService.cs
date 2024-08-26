@@ -25,7 +25,22 @@ namespace PHRecord.Services
                                                       join U in phrDbContext.UserInfos on L.UserId equals U.UserId
                                                       where U.IsActive == true
                                                       select new
-                                                      {U.UserId,U.FullName,U.ContctNo,U.Address,U.EmailAddress,U.FatherName,U.MotherName,U.BloodGroup,U.GenderId,U.DateOfBirth,Gender = (U.GenderId == 1) ? "Male" : "Female",UserType = (U.UserType == 1) ? "Patient" : "Doctor",U.RegistrationTime,U.IdentificationNo,U.IdentificationTypeId,
+                                                      {
+                                                          U.UserId,
+                                                          U.FullName,
+                                                          U.ContctNo,
+                                                          U.Address,
+                                                          U.EmailAddress,
+                                                          U.FatherName,
+                                                          U.MotherName,
+                                                          U.BloodGroup,
+                                                          U.GenderId,
+                                                          U.DateOfBirth,
+                                                          Gender = (U.GenderId == 1) ? "Male" : "Female",
+                                                          UserType = (U.UserType == 1) ? "Patient" : "Doctor",
+                                                          U.RegistrationTime,
+                                                          U.IdentificationNo,
+                                                          U.IdentificationTypeId,
                                                       }).FirstOrDefault());
 
                 if (userInfo != null)
@@ -54,7 +69,7 @@ namespace PHRecord.Services
                 responseDTO = new ResponseDTO
                 {
                     isSuccess = false,
-                    message = "Under maintanance!",
+                    message = "Failed!",
                     status = System.Net.HttpStatusCode.Unauthorized
                 };
             }
@@ -63,21 +78,32 @@ namespace PHRecord.Services
         }
 
 
-        public async Task<ResponseDTO> register(UserInfo userInfo)
+        public async Task<ResponseDTO> register(RegistrationDTO registrationDTO)
         {
             ResponseDTO responseDTO = new ResponseDTO { isSuccess = false, message = "Failed!", status = System.Net.HttpStatusCode.Unauthorized };
             try
             {
+                registrationDTO.userInfo.IsActive = true;
 
-                await phrDbContext.UserInfos.AddAsync(userInfo);
+                await phrDbContext.UserInfos.AddAsync(registrationDTO.userInfo);
                 int effectedrows = await phrDbContext.SaveChangesAsync();
+
+                LoginCred loginCred = new LoginCred
+                {
+                    UserName = registrationDTO.userInfo.EmailAddress,
+                    LoginPassword = registrationDTO.password,
+                    UserId = registrationDTO.userInfo.UserId,
+                    IsActive = true
+                };
+
+                await phrDbContext.LoginCreds.AddAsync(loginCred);
+                effectedrows = await phrDbContext.SaveChangesAsync();
 
 
                 if (effectedrows > 0)
                 {
                     responseDTO = new ResponseDTO
                     {
-                        data = userInfo,
                         isSuccess = true,
                         message = "Registration successful",
                         status = System.Net.HttpStatusCode.OK
@@ -99,7 +125,7 @@ namespace PHRecord.Services
                 responseDTO = new ResponseDTO
                 {
                     isSuccess = false,
-                    message = "Under maintanance!",
+                    message = "Failed!",
                     status = System.Net.HttpStatusCode.Unauthorized
                 };
             }
