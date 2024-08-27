@@ -28,7 +28,7 @@ namespace PHRecord.Controllers
         [Route("allHospitals")]
         public async Task<ResponseDTO> hospitals(int divisionId, int districtId, int unionId)
         {
-            ResponseDTO responseDTO = await globalService.allAreas();
+            ResponseDTO responseDTO = await globalService.hospitals(divisionId, districtId, unionId);
             return responseDTO;
         }
     }

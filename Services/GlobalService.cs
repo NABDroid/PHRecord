@@ -83,6 +83,10 @@ namespace PHRecord.Services
                                                                             ContactNo = H.ContactNo,
                                                                             NoOfSeat = H.NoOfSeat,
                                                                             BookedSeat = H.BookedSeat,
+                                                                            //DivisionId = H.DivisionId,
+                                                                            //DistrictId = H.DistrictId,
+                                                                            //UnionId = H.UnionId,
+
                                                                         }).ToList());
 
                 if (hospitals != null)
