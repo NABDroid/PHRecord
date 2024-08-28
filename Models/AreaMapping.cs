@@ -13,7 +13,7 @@ public partial class AreaMapping
 
     public int AreaTypeId { get; set; }
 
-    public bool IsActive { get; set; }
-
     public long? CurrentPopulation { get; set; }
+
+    public bool IsActive { get; set; }
 }

@@ -25,11 +25,9 @@ public partial class UserInfo
 
     public string? MotherName { get; set; }
 
-    public string? IsSingle { get; set; }
-
     public string? IdentificationNo { get; set; }
 
-    public int? IdentificationTypeId { get; set; }
+    public string? IdentificationTypeId { get; set; }
 
     public int? UserType { get; set; }
 

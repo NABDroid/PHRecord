@@ -20,4 +20,6 @@ public partial class DoctorInfo
     public string? ChamberAddress { get; set; }
 
     public string? Universities { get; set; }
+
+    public string? WorkTimes { get; set; }
 }

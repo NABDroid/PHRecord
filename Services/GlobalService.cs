@@ -83,10 +83,6 @@ namespace PHRecord.Services
                                                                             ContactNo = H.ContactNo,
                                                                             NoOfSeat = H.NoOfSeat,
                                                                             BookedSeat = H.BookedSeat,
-                                                                            //DivisionId = H.DivisionId,
-                                                                            //DistrictId = H.DistrictId,
-                                                                            //UnionId = H.UnionId,
-
                                                                         }).ToList());
 
                 if (hospitals != null)
@@ -105,6 +101,49 @@ namespace PHRecord.Services
                     {
                         isSuccess = false,
                         message = "No hospital found!",
+                        status = System.Net.HttpStatusCode.Unauthorized
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                responseDTO = new ResponseDTO
+                {
+                    isSuccess = false,
+                    message = "Failed!",
+                    status = System.Net.HttpStatusCode.Unauthorized
+                };
+            }
+
+            return responseDTO;
+        }
+
+
+        public async Task<ResponseDTO> uploadFiles(FileUploadDTO fileUploadDTO)
+        {
+            ResponseDTO responseDTO = new ResponseDTO { isSuccess = false, message = "Failed!", status = System.Net.HttpStatusCode.Unauthorized };
+
+            try
+            {
+                
+
+                if (hospitals != null)
+                {
+                    responseDTO = new ResponseDTO
+                    {
+                        data = hospitals,
+                        isSuccess = true,
+                        message = "File upload successful",
+                        status = System.Net.HttpStatusCode.OK
+                    };
+                }
+                else
+                {
+                    responseDTO = new ResponseDTO
+                    {
+                        isSuccess = false,
+                        message = "Failed to upload file!",
                         status = System.Net.HttpStatusCode.Unauthorized
                     };
                 }

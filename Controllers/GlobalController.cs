@@ -31,5 +31,14 @@ namespace PHRecord.Controllers
             ResponseDTO responseDTO = await globalService.hospitals(divisionId, districtId, unionId);
             return responseDTO;
         }
+
+
+        [HttpGet]
+        [Route("allHospitals")]
+        public async Task<ResponseDTO> uploadDocument(FileUploadDTO fileUploadDTO)
+        {
+            ResponseDTO responseDTO = await globalService.uploadFiles(fileUploadDTO);
+            return responseDTO;
+        }
     }
 }

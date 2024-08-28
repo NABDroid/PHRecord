@@ -22,11 +22,15 @@ public partial class PhrDbContext : DbContext
 
     public virtual DbSet<Document> Documents { get; set; }
 
+    public virtual DbSet<DocumentType> DocumentTypes { get; set; }
+
     public virtual DbSet<Hospital> Hospitals { get; set; }
 
     public virtual DbSet<LoginCred> LoginCreds { get; set; }
 
     public virtual DbSet<UserInfo> UserInfos { get; set; }
+
+    public virtual DbSet<UserType> UserTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -68,24 +72,39 @@ public partial class PhrDbContext : DbContext
                 .HasColumnName("longitude");
             entity.Property(e => e.RegistrationNo).HasColumnName("registrationNo");
             entity.Property(e => e.Universities).HasColumnName("universities");
+            entity.Property(e => e.WorkTimes).HasColumnName("workTimes");
         });
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasNoKey();
-
-            entity.Property(e => e.DocDescription).HasColumnName("docDescription");
-            entity.Property(e => e.DocTitle)
+            entity.Property(e => e.DocumentId).HasColumnName("documentId");
+            entity.Property(e => e.DocTypeId).HasColumnName("docTypeId");
+            entity.Property(e => e.DocumentDescription).HasColumnName("documentDescription");
+            entity.Property(e => e.DocumentTitle)
                 .HasMaxLength(50)
-                .HasColumnName("docTitle");
-            entity.Property(e => e.DocumentName).HasColumnName("documentName");
-            entity.Property(e => e.DocumentType)
+                .HasColumnName("documentTitle");
+            entity.Property(e => e.FileType)
                 .HasMaxLength(50)
-                .HasColumnName("documentType");
+                .HasColumnName("fileType");
+            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.MainDocument).HasColumnName("mainDocument");
             entity.Property(e => e.UploadTime)
+                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("uploadTime");
             entity.Property(e => e.UserId).HasColumnName("userId");
+        });
+
+        modelBuilder.Entity<DocumentType>(entity =>
+        {
+            entity.HasKey(e => e.DocTypeId);
+
+            entity.ToTable("DocumentType");
+
+            entity.Property(e => e.DocTypeId).HasColumnName("docTypeId");
+            entity.Property(e => e.DocType)
+                .HasMaxLength(50)
+                .HasColumnName("docType");
         });
 
         modelBuilder.Entity<Hospital>(entity =>
@@ -152,16 +171,15 @@ public partial class PhrDbContext : DbContext
                 .HasColumnName("fullName");
             entity.Property(e => e.GenderId).HasColumnName("genderId");
             entity.Property(e => e.IdentificationNo).HasColumnName("identificationNo");
-            entity.Property(e => e.IdentificationTypeId).HasColumnName("identificationTypeId");
+            entity.Property(e => e.IdentificationTypeId)
+                .HasMaxLength(100)
+                .HasColumnName("identificationTypeId");
             entity.Property(e => e.InactiveTime)
                 .HasColumnType("datetime")
                 .HasColumnName("inactiveTime");
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true)
                 .HasColumnName("isActive");
-            entity.Property(e => e.IsSingle)
-                .HasMaxLength(50)
-                .HasColumnName("isSingle");
             entity.Property(e => e.MotherName)
                 .HasMaxLength(50)
                 .HasColumnName("motherName");
@@ -170,6 +188,17 @@ public partial class PhrDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("registrationTime");
             entity.Property(e => e.UserType).HasColumnName("userType");
+        });
+
+        modelBuilder.Entity<UserType>(entity =>
+        {
+            entity.ToTable("UserType");
+
+            entity.Property(e => e.UserTypeId).HasColumnName("userTypeId");
+            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.UserTypeTitle)
+                .HasMaxLength(50)
+                .HasColumnName("userTypeTitle");
         });
 
         OnModelCreatingPartial(modelBuilder);

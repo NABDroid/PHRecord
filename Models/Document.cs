@@ -5,15 +5,21 @@ namespace PHRecord.Models;
 
 public partial class Document
 {
+    public long DocumentId { get; set; }
+
     public long? UserId { get; set; }
 
-    public string? DocumentName { get; set; }
+    public string? DocumentTitle { get; set; }
 
-    public string? DocumentType { get; set; }
+    public string? DocumentDescription { get; set; }
+
+    public byte[]? MainDocument { get; set; }
+
+    public string? FileType { get; set; }
+
+    public int? DocTypeId { get; set; }
 
     public DateTime? UploadTime { get; set; }
 
-    public string? DocDescription { get; set; }
-
-    public string? DocTitle { get; set; }
+    public bool? IsActive { get; set; }
 }
