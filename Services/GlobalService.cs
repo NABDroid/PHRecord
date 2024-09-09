@@ -120,33 +120,46 @@ namespace PHRecord.Services
         }
 
 
-        public async Task<ResponseDTO> uploadFiles(FileUploadDTO fileUploadDTO)
+        public async Task<ResponseDTO> uploadFiles(List<FileUploadDTO> fileUploadDTO)
         {
             ResponseDTO responseDTO = new ResponseDTO { isSuccess = false, message = "Failed!", status = System.Net.HttpStatusCode.Unauthorized };
 
             try
             {
+
+
+                for(int i = 0; i< fileUploadDTO.Count; i++)
+                {
+                    Document document = new Document
+                    {
+
+                        UserId = fileUploadDTO[i].userId,
+                        DocumentTitle = fileUploadDTO[i].fileName,
+                        DocumentDescription = fileUploadDTO[i].fileDescription,
+                        MainDocument = fileUploadDTO[i].base64File,
+                        FileType = fileUploadDTO[i].fileType,
+                        DocTypeId = fileUploadDTO[i].docTypeId,
+                    };
+
+                    await phrDbContext.Documents.AddAsync(document);
+                }
+
                 
 
-                if (hospitals != null)
+
+                
+                int effectedrows = await phrDbContext.SaveChangesAsync();
+
+                if (effectedrows > 0)
                 {
                     responseDTO = new ResponseDTO
                     {
-                        data = hospitals,
                         isSuccess = true,
-                        message = "File upload successful",
-                        status = System.Net.HttpStatusCode.OK
+                        message = "upload successful!",
                     };
                 }
-                else
-                {
-                    responseDTO = new ResponseDTO
-                    {
-                        isSuccess = false,
-                        message = "Failed to upload file!",
-                        status = System.Net.HttpStatusCode.Unauthorized
-                    };
-                }
+
+
 
             }
             catch (Exception ex)
@@ -155,7 +168,6 @@ namespace PHRecord.Services
                 {
                     isSuccess = false,
                     message = "Failed!",
-                    status = System.Net.HttpStatusCode.Unauthorized
                 };
             }
 

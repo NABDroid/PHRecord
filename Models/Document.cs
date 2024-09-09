@@ -13,9 +13,11 @@ public partial class Document
 
     public string? DocumentDescription { get; set; }
 
-    public byte[]? MainDocument { get; set; }
+    public string? MainDocument { get; set; }
 
     public string? FileType { get; set; }
+
+    public DateOnly? FileDate { get; set; }
 
     public int? DocTypeId { get; set; }
 

@@ -20,6 +20,8 @@ public partial class PhrDbContext : DbContext
 
     public virtual DbSet<DoctorInfo> DoctorInfos { get; set; }
 
+    public virtual DbSet<DoctorsVisitingHour> DoctorsVisitingHours { get; set; }
+
     public virtual DbSet<Document> Documents { get; set; }
 
     public virtual DbSet<DocumentType> DocumentTypes { get; set; }
@@ -75,14 +77,34 @@ public partial class PhrDbContext : DbContext
             entity.Property(e => e.WorkTimes).HasColumnName("workTimes");
         });
 
+        modelBuilder.Entity<DoctorsVisitingHour>(entity =>
+        {
+            entity.HasKey(e => e.MappingId);
+
+            entity.ToTable("DoctorsVisitingHour");
+
+            entity.Property(e => e.MappingId).HasColumnName("mappingId");
+            entity.Property(e => e.DoctorId).HasColumnName("doctorId");
+            entity.Property(e => e.EndTime).HasColumnName("endTime");
+            entity.Property(e => e.HospitalId).HasColumnName("hospitalId");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("isActive");
+            entity.Property(e => e.OffDays)
+                .HasMaxLength(50)
+                .HasColumnName("offDays");
+            entity.Property(e => e.StartTime).HasColumnName("startTime");
+        });
+
         modelBuilder.Entity<Document>(entity =>
         {
             entity.Property(e => e.DocumentId).HasColumnName("documentId");
             entity.Property(e => e.DocTypeId).HasColumnName("docTypeId");
             entity.Property(e => e.DocumentDescription).HasColumnName("documentDescription");
             entity.Property(e => e.DocumentTitle)
-                .HasMaxLength(50)
+                .HasMaxLength(120)
                 .HasColumnName("documentTitle");
+            entity.Property(e => e.FileDate).HasColumnName("fileDate");
             entity.Property(e => e.FileType)
                 .HasMaxLength(50)
                 .HasColumnName("fileType");

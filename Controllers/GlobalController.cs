@@ -33,9 +33,9 @@ namespace PHRecord.Controllers
         }
 
 
-        [HttpGet]
-        [Route("allHospitals")]
-        public async Task<ResponseDTO> uploadDocument(FileUploadDTO fileUploadDTO)
+        [HttpPost]
+        [Route("uploadDocument")]
+        public async Task<ResponseDTO> uploadDocument(List<FileUploadDTO> fileUploadDTO)
         {
             ResponseDTO responseDTO = await globalService.uploadFiles(fileUploadDTO);
             return responseDTO;
