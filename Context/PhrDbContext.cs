@@ -26,9 +26,13 @@ public partial class PhrDbContext : DbContext
 
     public virtual DbSet<DocumentType> DocumentTypes { get; set; }
 
+    public virtual DbSet<HistoryTitle> HistoryTitles { get; set; }
+
     public virtual DbSet<Hospital> Hospitals { get; set; }
 
     public virtual DbSet<LoginCred> LoginCreds { get; set; }
+
+    public virtual DbSet<PatientHistory> PatientHistories { get; set; }
 
     public virtual DbSet<UserInfo> UserInfos { get; set; }
 
@@ -129,6 +133,19 @@ public partial class PhrDbContext : DbContext
                 .HasColumnName("docType");
         });
 
+        modelBuilder.Entity<HistoryTitle>(entity =>
+        {
+            entity.HasKey(e => e.TitleId).HasName("PK_HistoryTitles");
+
+            entity.ToTable("HistoryTitle");
+
+            entity.Property(e => e.TitleId).HasColumnName("titleId");
+            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.Title)
+                .HasMaxLength(120)
+                .HasColumnName("title");
+        });
+
         modelBuilder.Entity<Hospital>(entity =>
         {
             entity.Property(e => e.HospitalId).HasColumnName("hospitalID");
@@ -163,6 +180,22 @@ public partial class PhrDbContext : DbContext
             entity.Property(e => e.UserName)
                 .HasMaxLength(50)
                 .HasColumnName("userName");
+        });
+
+        modelBuilder.Entity<PatientHistory>(entity =>
+        {
+            entity.HasKey(e => e.HistoryId);
+
+            entity.ToTable("PatientHistory");
+
+            entity.Property(e => e.HistoryId).HasColumnName("historyId");
+            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.IsTrue).HasColumnName("isTrue");
+            entity.Property(e => e.Remarks)
+                .HasMaxLength(120)
+                .HasColumnName("remarks");
+            entity.Property(e => e.TitleId).HasColumnName("titleId");
+            entity.Property(e => e.UserId).HasColumnName("userId");
         });
 
         modelBuilder.Entity<UserInfo>(entity =>

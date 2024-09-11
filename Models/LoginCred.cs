@@ -5,7 +5,7 @@ namespace PHRecord.Models;
 
 public partial class LoginCred
 {
-    public long UserId { get; set; }
+    public int UserId { get; set; }
 
     public string UserName { get; set; } = null!;
 

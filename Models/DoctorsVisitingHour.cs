@@ -5,9 +5,9 @@ namespace PHRecord.Models;
 
 public partial class DoctorsVisitingHour
 {
-    public long MappingId { get; set; }
+    public int MappingId { get; set; }
 
-    public long DoctorId { get; set; }
+    public int DoctorId { get; set; }
 
     public int HospitalId { get; set; }
 

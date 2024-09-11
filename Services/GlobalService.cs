@@ -32,7 +32,7 @@ namespace PHRecord.Services
                                                           CurrentPopulation = A.CurrentPopulation,
                                                       }).ToList());
 
-                if (areaMappings != null)
+                if (areaMappings.Count > 0)
                 {
                     responseDTO = new ResponseDTO
                     {
@@ -85,7 +85,7 @@ namespace PHRecord.Services
                                                                             BookedSeat = H.BookedSeat,
                                                                         }).ToList());
 
-                if (hospitals != null)
+                if (hospitals.Count > 0)
                 {
                     responseDTO = new ResponseDTO
                     {
@@ -118,7 +118,6 @@ namespace PHRecord.Services
 
             return responseDTO;
         }
-
 
         public async Task<ResponseDTO> uploadFiles(List<FileUploadDTO> fileUploadDTO)
         {

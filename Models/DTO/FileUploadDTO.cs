@@ -3,7 +3,7 @@
     public class FileUploadDTO
     {
 
-        public long userId { get; set; }
+        public int userId { get; set; }
         public string fileName { get; set; }
         public string fileDescription { get; set; }
         public string base64File { get; set; }

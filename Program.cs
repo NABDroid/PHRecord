@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PhrDbContext>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<GlobalService>();
+builder.Services.AddScoped<PatientService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -5,9 +5,9 @@ namespace PHRecord.Models;
 
 public partial class Document
 {
-    public long DocumentId { get; set; }
+    public int DocumentId { get; set; }
 
-    public long? UserId { get; set; }
+    public int? UserId { get; set; }
 
     public string? DocumentTitle { get; set; }
 
