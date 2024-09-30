@@ -83,16 +83,32 @@ namespace PHRecord.Services
             ResponseDTO responseDTO = new ResponseDTO { isSuccess = false, message = "Failed!", status = System.Net.HttpStatusCode.Unauthorized };
             try
             {
-                registrationDTO.userInfo.IsActive = true;
 
-                await phrDbContext.UserInfos.AddAsync(registrationDTO.userInfo);
+                UserInfo userInfo = new UserInfo
+                {
+                    FullName = registrationDTO.FullName,
+                    EmailAddress = registrationDTO.EmailAddress,
+                    ContctNo = registrationDTO.ContctNo,
+                    Address = registrationDTO.Address,
+                    GenderId = registrationDTO.GenderId,
+                    DateOfBirth =  DateOnly.FromDateTime(registrationDTO.DateOfBirth),
+                    BloodGroup = registrationDTO.BloodGroup,
+                    IdentificationNo = registrationDTO.IdentificationNo,
+                    IdentificationTypeId = registrationDTO.IdentificationTypeId,
+                    IsActive = true,
+                    UserType = 1
+                };
+
+
+
+                await phrDbContext.UserInfos.AddAsync(userInfo);
                 int effectedrows = await phrDbContext.SaveChangesAsync();
 
                 LoginCred loginCred = new LoginCred
                 {
-                    UserName = registrationDTO.userInfo.EmailAddress,
+                    UserName = registrationDTO.EmailAddress,
                     LoginPassword = registrationDTO.password,
-                    UserId = registrationDTO.userInfo.UserId,
+                    UserId = userInfo.UserId,
                     IsActive = true
                 };
 
@@ -104,6 +120,7 @@ namespace PHRecord.Services
                 {
                     responseDTO = new ResponseDTO
                     {
+                        data = userInfo,
                         isSuccess = true,
                         message = "Registration successful",
                         status = System.Net.HttpStatusCode.OK

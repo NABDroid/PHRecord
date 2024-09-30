@@ -33,8 +33,5 @@ namespace PHRecord.Controllers
             ResponseDTO responseDTO = await authService.register(registrationDTO);
             return responseDTO;
         }
-
-
-
     }
 }

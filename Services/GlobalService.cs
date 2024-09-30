@@ -21,16 +21,16 @@ namespace PHRecord.Services
             try
             {
                 List<AreaMapping> areaMappings = await Task.FromResult((from A in phrDbContext.AreaMappings
-                                                      where A.IsActive == true
-                                                      select new AreaMapping
+                                                                        where A.IsActive == true
+                                                                        select new AreaMapping
 
-                                                      {
-                                                          AreaId = A.AreaId,
-                                                          AreaName = A.AreaName,
-                                                          ParentId = A.ParentId,
-                                                          AreaTypeId = A.AreaTypeId,
-                                                          CurrentPopulation = A.CurrentPopulation,
-                                                      }).ToList());
+                                                                        {
+                                                                            AreaId = A.AreaId,
+                                                                            AreaName = A.AreaName,
+                                                                            ParentId = A.ParentId,
+                                                                            AreaTypeId = A.AreaTypeId,
+                                                                            CurrentPopulation = A.CurrentPopulation,
+                                                                        }).ToList());
 
                 if (areaMappings.Count > 0)
                 {
@@ -73,17 +73,17 @@ namespace PHRecord.Services
             try
             {
                 List<Hospital> hospitals = await Task.FromResult((from H in phrDbContext.Hospitals
-                                                                        where H.IsActive == true && (H.DivisionId == divisionId || divisionId == 0) && 
-                                                                        (H.DistrictId == districtId || districtId == 0) && (H.UnionId == unionId || unionId == 0)
-                                                                        select new Hospital
-                                                                        {
-                                                                            HospitalId =  H.HospitalId,
-                                                                            HospitalName = H.HospitalName,
-                                                                            HospitalAddress = H.HospitalAddress,
-                                                                            ContactNo = H.ContactNo,
-                                                                            NoOfSeat = H.NoOfSeat,
-                                                                            BookedSeat = H.BookedSeat,
-                                                                        }).ToList());
+                                                                  where H.IsActive == true && (H.DivisionId == divisionId || divisionId == 0) &&
+                                                                  (H.DistrictId == districtId || districtId == 0) && (H.UnionId == unionId || unionId == 0)
+                                                                  select new Hospital
+                                                                  {
+                                                                      HospitalId = H.HospitalId,
+                                                                      HospitalName = H.HospitalName,
+                                                                      HospitalAddress = H.HospitalAddress,
+                                                                      ContactNo = H.ContactNo,
+                                                                      NoOfSeat = H.NoOfSeat,
+                                                                      BookedSeat = H.BookedSeat,
+                                                                  }).ToList());
 
                 if (hospitals.Count > 0)
                 {
@@ -127,7 +127,7 @@ namespace PHRecord.Services
             {
 
 
-                for(int i = 0; i< fileUploadDTO.Count; i++)
+                for (int i = 0; i < fileUploadDTO.Count; i++)
                 {
                     Document document = new Document
                     {
@@ -143,10 +143,10 @@ namespace PHRecord.Services
                     await phrDbContext.Documents.AddAsync(document);
                 }
 
-                
 
 
-                
+
+
                 int effectedrows = await phrDbContext.SaveChangesAsync();
 
                 if (effectedrows > 0)
@@ -171,6 +171,118 @@ namespace PHRecord.Services
             }
 
             return responseDTO;
+        }
+
+
+        public async Task<ResponseDTO> getDocumentList(int userId)
+        {
+
+            ResponseDTO responseDTO = new ResponseDTO { isSuccess = false, message = "Failed!", status = System.Net.HttpStatusCode.Unauthorized };
+
+            try
+            {
+                var documents = await Task.FromResult((from D in phrDbContext.Documents
+                                                                  where D.UserId == userId && D.IsActive == true
+                                                                  join DT in phrDbContext.DocumentTypes on D.DocTypeId equals DT.DocTypeId
+                                                                  select new 
+                                                                  {
+                                                                       D.DocumentId,
+                                                                       D.DocumentTitle,
+                                                                       D.DocumentDescription,
+                                                                       DT.DocType,
+                                                                  }).ToList());
+
+                if (documents.Count > 0)
+                {
+                    responseDTO = new ResponseDTO
+                    {
+                        data = documents,
+                        isSuccess = true,
+                        message = "All documents of " + userId,
+                        status = System.Net.HttpStatusCode.OK
+                    };
+                }
+                else
+                {
+                    responseDTO = new ResponseDTO
+                    {
+                        isSuccess = false,
+                        message = "No document found!",
+                        status = System.Net.HttpStatusCode.Unauthorized
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                responseDTO = new ResponseDTO
+                {
+                    isSuccess = false,
+                    message = "Failed!",
+                    status = System.Net.HttpStatusCode.Unauthorized
+                };
+            }
+
+            return responseDTO;
+
+        }
+
+
+        public async Task<ResponseDTO> getDocumentById(int documentId)
+        {
+
+            ResponseDTO responseDTO = new ResponseDTO { isSuccess = false, message = "Failed!", status = System.Net.HttpStatusCode.Unauthorized };
+
+            try
+            {
+                var document = await Task.FromResult((from D in phrDbContext.Documents
+                                                           join DT in phrDbContext.DocumentTypes on D.DocTypeId equals DT.DocTypeId
+                                                           where D.DocumentId == documentId && D.IsActive == true
+                                                           select new
+                                                           {
+                                                                D.DocumentId,
+                                                                D.DocumentTitle,
+                                                                D.DocumentDescription,
+                                                                D.MainDocument,
+                                                                D.FileType,
+                                                                D.FileDate,
+                                                                DT.DocType
+
+                                                           }).FirstOrDefault());
+
+                if (document != null)
+                {
+                    responseDTO = new ResponseDTO
+                    {
+                        data = document,
+                        isSuccess = true,
+                        message = "Document of " + documentId,
+                        status = System.Net.HttpStatusCode.OK
+                    };
+                }
+                else
+                {
+                    responseDTO = new ResponseDTO
+                    {
+                        isSuccess = false,
+                        message = "No document found!",
+                        status = System.Net.HttpStatusCode.Unauthorized
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                responseDTO = new ResponseDTO
+                {
+                    isSuccess = false,
+                    message = "Failed!",
+                    status = System.Net.HttpStatusCode.Unauthorized
+                };
+            }
+
+            return responseDTO;
+
         }
 
     }

@@ -40,5 +40,24 @@ namespace PHRecord.Controllers
             ResponseDTO responseDTO = await globalService.uploadFiles(fileUploadDTO);
             return responseDTO;
         }
+
+        [HttpGet]
+        [Route("documentList")]
+        public async Task<ResponseDTO> documentList(int userId)
+        {
+            ResponseDTO responseDTO = await globalService.getDocumentList(userId);
+            return responseDTO;
+        }
+
+
+        [HttpGet]
+        [Route("getDocumentById")]
+        public async Task<ResponseDTO> getDocumentById(int documentId)
+        {
+            ResponseDTO responseDTO = await globalService.getDocumentById(documentId);
+            return responseDTO;
+        }
+
+
     }
 }
